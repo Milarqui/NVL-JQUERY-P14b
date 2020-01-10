@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+ <head>
+   <meta charset="utf-8">
+   <title>Pruebas de imagen</title>
+   <style>
+    td { //Estilo CSS usado por todas las celdas
+     background: 'white';
+     border: 2px groove black;
+     color: black;
+     text-align: center;
+    }
+    td#pick { //Estilo CSS usado por la celda escogida
+     background: 'blue';
+     border: 5px dotted red;
+     text-align: center;
+    }
+   </style>
+ </head>
+ <body>
+  <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+  <script>
+   $( document ).ready(function() {
+    var toggled = false; // Indicador de estado
+    var row = 0;  //Variables usadas para las coordenadas
+    var col = 0;
+    var rows = 0;
+    var cols = 0;
+    $( 'td' ).on('click', function() { //Cuando se pincha una celda
+     if(toggled) {
+      $( '#pick' ).attr("id",""); //Si ya hay otra celda activa, se desactiva
+     }
+     $( this ).attr("id","pick"); //La celda pinchada adquiere la ID "pick"
+     toggled = true; //Estado activo
+     col = $( "#pick" ).index();            //Se busca la columna y fila de la celda pinchada
+     row = $( "#pick" ).parent( ).index();
+     cols = $( "#pick" ).parent( ).children( ).length; //Se obtienen las dimensiones de la matriz
+     rows = $( "#pick" ).parent( ).parent( ).children( ).length;
+    });
+    $( this ).on('keydown', function( event ) { //Al usar las teclas
+     if((event.keyCode >= 37) && (event.keyCode <= 40)){ //Determina si son las flechas
+      if(event.keyCode == 37) { //A la izquierda
+       col--;
+      }
+      else if(event.keyCode == 38) { //Arriba
+       row--;
+      }
+      else if(event.keyCode == 39) { //A la derecha
+       col++;
+      }
+      else if(event.keyCode == 40) { //Abajo
+       row++;
+      }
+      col = col % cols;//Para que el valor de las coordenadas se mantenga en los límites
+      row = row % rows;
+      $( '#pick' ).attr("id","");//La celda que antes estaba "encendida" pierde su id
+      $( 'tr' ).eq(row).children( 'td' ).eq(col).attr("id","pick"); //Asignamos la id "pick" a la celda correspondiente
+     }
+    });
+   });
+  </script>
+  <div>
+   <table>
+    <tr>//Asignamos texto a cada celda para que se distingan mejor entre sí
+     <td>A1</td>
+     <td>A2</td>
+     <td>A3</td>
+    </tr>
+    <tr>
+     <td>B1</td>
+     <td>B2</td>
+     <td>B3</td>
+    </tr>
+    <tr>
+     <td>C1</td>
+     <td>C2</td>
+     <td>C3</td>
+    </tr>
+   </table>
+  </div>
+ </body>
+</html>
